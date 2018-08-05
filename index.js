@@ -2,8 +2,8 @@ const config = require("./config.json")
 const tokenFile = require("./token.json")
 const Discord = require("discord.js");
 const fs = require("fs");
-const bot = new Discord.Client({disableEveryone: true})
-bot.commands = new Discord.Collection();
+const client = new Discord.Client({disableEveryone: true})
+client.commands = new Discord.Collection();
 
 fs.readdir("./commands", (err, files) => {
   if(err) console.lor(err);
@@ -17,31 +17,17 @@ fs.readdir("./commands", (err, files) => {
 jsfile.forEach((f, i) =>{
   let props = require(`./commands/${f}`);
   console.log(`[INFO] "${f}" loaded!`)
-  bot.commands.set(props.help.name, props)
+  client.commands.set(props.help.name, props)
 });
 
+fs.readdir("./events/", (err, files) => {
+  if (err) return console.error(err);
+  files.forEach(file => {
+    const event = require(./events/${file});
+    let eventName = file.split(".")[0];
+    client.on(eventName, event.bind(null, client));
+  });
 });
+client.config = config;
 
-bot.on("ready", async () => {
-    console.log(`[INFO] ${bot.user.username} has succesfully started!`)
-    bot.user.setActivity(config.acitivityText, {type: config.acitivityType});
-    bot.user.setStatus(`${config.status}`)
-});
-
-bot.on("message", async message => {
-    if(message.author.bot) return;
-    if(message.channel.type === "dm") return;
-
-    let prefix = config.prefix;
-    let messageArray = message.content.split(" ");
-    let cmd = messageArray[0];
-    let args = messageArray.slice(1);
-    let author = message.author
-    let guild = message.guild
-
-    let commandFile = bot.commands.get(cmd.slice(prefix.length));
-    if(commandFile) commandFile.run(prefix, messageArray, cmd, bot, message, args, author, guild, lang)
-
-});
-
-bot.login(tokenFile.token);
+client.login(tokenFile.token);
