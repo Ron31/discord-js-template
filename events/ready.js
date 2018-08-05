@@ -1,3 +1,3 @@
-console.log(`[INFO] ${bot.user.username} has succesfully started!`)
-bot.user.setActivity(config.acitivityText, {type: config.acitivityType});
-bot.user.setStatus(`${config.status}`)
+console.log(`[INFO] ${client.user.username} has succesfully started!`)
+client.user.setActivity(config.acitivityText, {type: config.acitivityType});
+client.user.setStatus(`${config.status}`)

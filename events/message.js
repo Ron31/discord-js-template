@@ -8,5 +8,5 @@ let args = messageArray.slice(1);
 let author = message.author
 let guild = message.guild
 
-let commandFile = bot.commands.get(cmd.slice(prefix.length));
-if(commandFile) commandFile.run(prefix, messageArray, cmd, bot, message, args, author, guild, lang)
+let commandFile = client.commands.get(cmd.slice(prefix.length));
+if(commandFile) commandFile.run(prefix, messageArray, cmd, client, message, args, author, guild, lang)
